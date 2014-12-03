@@ -5,6 +5,8 @@ class TasksController < ApplicationController
   # GET /tasks.json
   def index
     @tasks = Task.all
+    render :partial => 'index'
+
   end
 
   # GET /tasks/1
@@ -53,6 +55,16 @@ class TasksController < ApplicationController
     respond_to do |format|
       format.html { redirect_to tasks_url, notice: 'Task was successfully destroyed.' }
       format.json { head :no_content }
+    end
+  end
+
+  def archive
+    @task = Task.find(params[:id])
+    @task.archived = 1
+    if @task.save
+      render json: {:success => true, :task => @task}
+    else
+      render json: {:success => false, :error => "something happened :( "}
     end
   end
 
